@@ -2,5 +2,6 @@ package parkinglot
 
 class ParkingLot {
 
-    lateinit var vehicle: Vehicle
+    var vehicles = ArrayList<Vehicle>(10)
+
 }

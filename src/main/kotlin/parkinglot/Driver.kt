@@ -1,16 +1,14 @@
 package parkinglot
 
-class Driver {
+class Driver(var name: String) {
 
-    lateinit var name: String
-
-    fun park(vehicle: Vehicle, parkingLot: ParkingLot) {
-        parkingLot.vehicle = vehicle
-
+    fun park(vehicle: Vehicle, parkingLot: ParkingLot): String {
+        parkingLot.vehicles.add(vehicle)
+        return vehicle.licenseNo
     }
 
-    fun take(parkingLot: ParkingLot): Vehicle? {
-        return parkingLot.vehicle
+    fun take(receipt: String, parkingLot: ParkingLot): Vehicle {
+        return parkingLot.vehicles.first { v -> v.licenseNo == receipt }
     }
 
 }
