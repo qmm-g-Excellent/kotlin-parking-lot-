@@ -1,7 +1,5 @@
 package parkinglot
 
-class Vehicle {
-
-    lateinit var licenseNo: String
+class Vehicle(var licenseNo: String) {
 
 }
