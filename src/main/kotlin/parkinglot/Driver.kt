@@ -6,6 +6,9 @@ import kotlin.NoSuchElementException
 class Driver(var name: String) {
 
     fun park(vehicle: Vehicle, parkingLot: ParkingLot): String {
+        if (parkingLot.vehicles.contains(vehicle)) {
+            throw IllegalArgumentException("No such vehicle in parkingLot.")
+        }
         parkingLot.vehicles.add(vehicle)
         return vehicle.licenseNo
     }

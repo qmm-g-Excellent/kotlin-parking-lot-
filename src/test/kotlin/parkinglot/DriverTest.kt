@@ -38,7 +38,22 @@ class DriverTest {
     }
 
     @Test
-    fun `should return 400 when take a not existed vehicle`() {
+    fun `should throw error when park a existed vehicle`() {
+        val driver = Driver("XiaoZhang")
+        val vehicle = Vehicle("001")
+        val parkingLot = ParkingLot()
+
+        driver.park(vehicle, parkingLot)
+
+        assertFailsWith(
+                exceptionClass = IllegalArgumentException::class,
+                message = "Such vehicle has existed.",
+                block = { driver.park(vehicle, parkingLot) }
+        )
+    }
+
+    @Test
+    fun `should throw error when take a not existed vehicle`() {
         val driver = Driver("XiaoZhang")
         val parkingLot = ParkingLot()
 
