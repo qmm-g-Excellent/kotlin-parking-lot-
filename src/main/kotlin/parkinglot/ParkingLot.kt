@@ -2,6 +2,10 @@ package parkinglot
 
 class ParkingLot {
 
-    var vehicles = ArrayList<Vehicle>(10)
+    object constant {
+        const val OVERSIZE = 10
+    }
+
+    var vehicles = ArrayList<Vehicle>(constant.OVERSIZE)
 
 }

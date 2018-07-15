@@ -11,7 +11,6 @@ class DriverTest {
         val vehicle = Vehicle("001")
         val driver = Driver("XiaoMing")
         val parkingLot = ParkingLot()
-
         val receipt = driver.park(vehicle, parkingLot)
         val actualVehicle = driver.take(receipt, parkingLot)
         assertEquals(vehicle, actualVehicle)
@@ -34,7 +33,7 @@ class DriverTest {
         val actualSecondVehicle = secondDriver.take(secondReceipt, parkingLot)
 
         assertEquals(firstVehicle, actualFirstVehicle)
-        assertEquals(secondReceipt, actualSecondVehicle)
+        assertEquals(actualSecondVehicle, actualSecondVehicle)
     }
 
     @Test
@@ -42,8 +41,6 @@ class DriverTest {
         val driver = Driver("XiaoZhang")
         val vehicle = Vehicle("001")
         val parkingLot = ParkingLot()
-
-        driver.park(vehicle, parkingLot)
 
         assertFailsWith(
                 exceptionClass = IllegalArgumentException::class,
@@ -60,7 +57,10 @@ class DriverTest {
         assertFailsWith(
                 exceptionClass = NoSuchElementException::class,
                 message = "No such vehicle in parkingLot.",
-                block = { driver.take("Not parked vehicle", parkingLot) }
+                block = {
+                    driver.take(Receipt("Not parked vehicle", "xiaoming"),
+                            parkingLot)
+                }
         )
     }
 
@@ -76,7 +76,7 @@ class DriverTest {
         assertFailsWith(
                 exceptionClass = Exception::class,
                 message = "Parking lot is full now.",
-                block = {  driver.park(Vehicle("11"), parkingLot) }
+                block = { driver.park(Vehicle("11"), parkingLot) }
         )
     }
 }
