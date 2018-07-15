@@ -2,6 +2,7 @@ package parkinglot
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import kotlin.test.assertFailsWith
 
 class DriverTest {
 
@@ -29,10 +30,23 @@ class DriverTest {
         val firstReceipt = firstDriver.park(firstVehicle, parkingLot)
         val secondReceipt = secondDriver.park(secondVehicle, parkingLot)
 
-        val actualFirstVehicle = firstDriver.take(firstReceipt,parkingLot)
-        val actualSecondVehicle = secondDriver.take(secondReceipt,parkingLot)
+        val actualFirstVehicle = firstDriver.take(firstReceipt, parkingLot)
+        val actualSecondVehicle = secondDriver.take(secondReceipt, parkingLot)
 
         assertEquals(firstVehicle, actualFirstVehicle)
-        assertEquals(secondReceipt,actualSecondVehicle )
+        assertEquals(secondReceipt, actualSecondVehicle)
     }
+
+    @Test
+    fun `should return 400 when take a not existed vehicle`() {
+        val driver = Driver("XiaoZhang")
+        val parkingLot = ParkingLot()
+
+        assertFailsWith(
+                exceptionClass = NoSuchElementException::class,
+                message = "No such vehicle in parkingLot.",
+                block = { driver.take("Not parked vehicle", parkingLot) }
+        )
+    }
+
 }

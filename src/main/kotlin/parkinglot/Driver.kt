@@ -1,5 +1,8 @@
 package parkinglot
 
+import java.util.*
+import kotlin.NoSuchElementException
+
 class Driver(var name: String) {
 
     fun park(vehicle: Vehicle, parkingLot: ParkingLot): String {
@@ -7,8 +10,12 @@ class Driver(var name: String) {
         return vehicle.licenseNo
     }
 
-    fun take(receipt: String, parkingLot: ParkingLot): Vehicle {
-        return parkingLot.vehicles.first { v -> v.licenseNo == receipt }
+    fun take(licenseNo: String, parkingLot: ParkingLot): Vehicle? {
+        val vehicle = parkingLot.vehicles.firstOrNull { v -> v.licenseNo == licenseNo }
+        if (Objects.isNull(vehicle)) {
+            throw NoSuchElementException("No such vehicle in parkingLot.")
+        }
+        return vehicle
     }
 
 }
