@@ -9,10 +9,7 @@ class DriverTest {
     @Test
     fun `should parking a vehicle to a parking lot and take it out`() {
         val vehicle = Vehicle("001")
-        val driver = Driver("XiaoMing")
-        val parkingLot = ParkingLot()
-        val receipt = driver.park(vehicle, parkingLot)
-        val actualVehicle = driver.take(receipt, parkingLot)
+        val actualVehicle = park("XiaoMing", vehicle)
         assertEquals(vehicle, actualVehicle)
     }
 
@@ -20,20 +17,17 @@ class DriverTest {
     fun `should parking multiple vehicles to a parking lot and take it out`() {
         val firstVehicle = Vehicle("001")
         val secondVehicle = Vehicle("002")
-
-        val firstDriver = Driver("XiaoMing")
-        val secondDriver = Driver("XiaoQiang")
-
         val parkingLot = ParkingLot()
 
-        val firstReceipt = firstDriver.park(firstVehicle, parkingLot)
-        val secondReceipt = secondDriver.park(secondVehicle, parkingLot)
-
-        val actualFirstVehicle = firstDriver.take(firstReceipt, parkingLot)
-        val actualSecondVehicle = secondDriver.take(secondReceipt, parkingLot)
+        val xiaoMing = Driver("XiaoMing")
+        val xiaoMingReceipt = xiaoMing.park(firstVehicle, parkingLot)
+        val xiaoQing = Driver("XiaoQing")
+        val xiaoQingReceipt = xiaoQing.park(secondVehicle, parkingLot)
+        val actualFirstVehicle = xiaoMing.take(xiaoMingReceipt, parkingLot)
+        val actualSecondVehicle = xiaoQing.take(xiaoQingReceipt, parkingLot)
 
         assertEquals(firstVehicle, actualFirstVehicle)
-        assertEquals(actualSecondVehicle, actualSecondVehicle)
+        assertEquals(secondVehicle, actualSecondVehicle)
     }
 
     @Test
@@ -41,12 +35,11 @@ class DriverTest {
         val driver = Driver("XiaoZhang")
         val vehicle = Vehicle("001")
         val parkingLot = ParkingLot()
+        driver.park(vehicle, parkingLot)
 
-        assertFailsWith(
-                exceptionClass = IllegalArgumentException::class,
-                message = "Such vehicle has existed.",
-                block = { driver.park(vehicle, parkingLot) }
-        )
+        assertFailsWith(IllegalArgumentException::class, "Such vehicle has existed.") {
+            driver.park(vehicle, parkingLot)
+        }
     }
 
     @Test
@@ -54,14 +47,9 @@ class DriverTest {
         val driver = Driver("XiaoZhang")
         val parkingLot = ParkingLot()
 
-        assertFailsWith(
-                exceptionClass = NoSuchElementException::class,
-                message = "No such vehicle in parkingLot.",
-                block = {
-                    driver.take(Receipt("Not parked vehicle", "xiaoming"),
-                            parkingLot)
-                }
-        )
+        assertFailsWith(NoSuchElementException::class,"No such vehicle in parkingLot.") {
+            driver.take(Receipt("Not parked vehicle", "xiaoming"), parkingLot)
+        }
     }
 
     @Test
@@ -78,5 +66,12 @@ class DriverTest {
                 message = "Parking lot is full now.",
                 block = { driver.park(Vehicle("11"), parkingLot) }
         )
+    }
+
+    private fun park(name: String, vehicle: Vehicle): Vehicle? {
+        val driver = Driver(name)
+        val parkingLot = ParkingLot()
+        val receipt = driver.park(vehicle, parkingLot)
+        return driver.take(receipt, parkingLot)
     }
 }
