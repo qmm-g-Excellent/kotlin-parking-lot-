@@ -29,6 +29,7 @@ class ParkingLot {
         if (Objects.isNull(vehicle)) {
             throw NoSuchElementException("No such vehicle in parkingLot.")
         }
+        vehicles.remove(vehicle)
         return vehicle
     }
 

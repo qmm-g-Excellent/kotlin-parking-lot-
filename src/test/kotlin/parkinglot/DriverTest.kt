@@ -9,7 +9,10 @@ class DriverTest {
     @Test
     fun `should parking a vehicle to a parking lot and take it out`() {
         val vehicle = Vehicle("001")
-        val actualVehicle = park("XiaoMing", vehicle)
+        val driver = Driver("XiaoMing")
+        val parkingLot = ParkingLot()
+        val receipt = driver.park(vehicle, parkingLot)
+        val actualVehicle = driver.take(receipt, parkingLot)
         assertEquals(vehicle, actualVehicle)
     }
 
@@ -68,10 +71,18 @@ class DriverTest {
         )
     }
 
-    private fun park(name: String, vehicle: Vehicle): Vehicle? {
-        val driver = Driver(name)
+    @Test
+    fun `should not take the same vehicle`() {
         val parkingLot = ParkingLot()
+        val driver = Driver("XiaoMing")
+        val vehicle = Vehicle("001")
+
         val receipt = driver.park(vehicle, parkingLot)
-        return driver.take(receipt, parkingLot)
+        driver.take(receipt, parkingLot)
+
+        assertFailsWith(NoSuchElementException::class, "No such vehicle in parkingLot.") {
+            driver.take(receipt, parkingLot)
+        }
     }
+
 }
