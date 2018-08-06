@@ -24,7 +24,7 @@ class ParkingLot (vehicles: ArrayList<Vehicle> = ArrayList(Constant.MAX_SIZE)){
 
     fun take(receipt: Receipt, driverName: String): Vehicle? {
         val vehicle = vehicles.firstOrNull { v ->
-            receipt.match(v.licenseNo, driverName)
+            receipt.match(v.licenseNo)
         }
         if (Objects.isNull(vehicle)) {
             throw NoSuchElementException("No such vehicle in parkingLot.")
