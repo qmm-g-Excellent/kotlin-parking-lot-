@@ -11,12 +11,12 @@ class AttendantTest {
         val parkingLot = ParkingLot(ArrayList(2))
 
         val attendant = Attendant("Xiao Li")
-        val drive = Driver("Xiao Zhang")
+        val driver = Driver("Xiao Zhang")
         val vehicle = Vehicle("100")
         val parkingLots = arrayListOf(parkingLot)
 
         val receipt = attendant.park(vehicle, parkingLots)
-        val actualVehicle = drive.take(receipt, parkingLots[0])
+        val actualVehicle = driver.take(receipt, parkingLots[0])
 
         assertEquals(vehicle, actualVehicle)
     }
@@ -26,7 +26,7 @@ class AttendantTest {
         val firstParkingLot = ParkingLot(ArrayList(2))
         val secondParkingLot = ParkingLot(ArrayList(2))
 
-        val drive = Driver("Xiao Zhang")
+        val driver = Driver("Xiao Zhang")
         val attendant = Attendant("Xiao Hu")
 
         val firstVehicle = Vehicle("100")
@@ -39,19 +39,19 @@ class AttendantTest {
                           attendant.park(secondVehicle, parkingLots)
         val thirdReceipt = attendant.park(thirdVehicle, parkingLots)
 
-        val actualFirstVehicle = drive.take(firstReceipt, parkingLots[0])
-        val actualThirdVehicle = drive.take(thirdReceipt, parkingLots[1])
+        val actualFirstVehicle = driver.take(firstReceipt, parkingLots[0])
+        val actualThirdVehicle = driver.take(thirdReceipt, parkingLots[1])
 
         assertEquals(firstVehicle, actualFirstVehicle)
         assertEquals(thirdVehicle, actualThirdVehicle)
     }
 
     @Test
-    fun `attendant parking two vehicles to two parking lots in order and take second vehicle out from second parking lot by drive`() {
+    fun `should throw error when park a vehicle by attendant while all parking lots are full`() {
         val firstParkingLot = ParkingLot(ArrayList(2))
         val secondParkingLot = ParkingLot(ArrayList(2))
 
-        val drive = Driver("Xiao Zhang")
+        val driver = Driver("Xiao Zhang")
         val attendant = Attendant("Xiao Hu")
 
         val firstVehicle = Vehicle("100")
@@ -73,8 +73,8 @@ class AttendantTest {
                 block = {attendant.park(Vehicle("1005"), parkingLots)}
         )
 
-        assertEquals(firstVehicle, drive.take(firstReceipt, parkingLots[0]))
-        assertEquals(lastVehicle, drive.take(lastReceipt, parkingLots[1]))
+        assertEquals(firstVehicle, driver.take(firstReceipt, parkingLots[0]))
+        assertEquals(lastVehicle, driver.take(lastReceipt, parkingLots[1]))
     }
 
     @Test
@@ -82,11 +82,11 @@ class AttendantTest {
         val parkingLot = ParkingLot(ArrayList(2))
 
         val attendant = Attendant("Xiao Li")
-        val drive = Driver("Xiao Zhang")
+        val driver = Driver("Xiao Zhang")
         val vehicle = Vehicle("100")
         val parkingLots = arrayListOf(parkingLot)
 
-        val receipt = drive.park(vehicle, parkingLots)
+        val receipt = driver.park(vehicle, parkingLots)
         val actualVehicle = attendant.take(receipt, parkingLots[0])
 
 
@@ -98,7 +98,7 @@ class AttendantTest {
         val firstParkingLot = ParkingLot(ArrayList(2))
         val secondParkingLot = ParkingLot(ArrayList(2))
 
-        val drive = Driver("Xiao Zhang")
+        val driver = Driver("Xiao Zhang")
         val attendant = Attendant("Xiao Hu")
 
         val firstVehicle = Vehicle("100")
@@ -107,14 +107,45 @@ class AttendantTest {
 
         val parkingLots = arrayListOf(firstParkingLot, secondParkingLot)
 
-        val firstReceipt = drive.park(firstVehicle, parkingLots)
-        drive.park(secondVehicle, parkingLots)
-        val thirdReceipt = drive.park(thirdVehicle, parkingLots)
+        val firstReceipt = driver.park(firstVehicle, parkingLots)
+        driver.park(secondVehicle, parkingLots)
+        val thirdReceipt = driver.park(thirdVehicle, parkingLots)
 
         val actualFirstVehicle = attendant.take(firstReceipt, parkingLots[0])
         val actualThirdVehicle = attendant.take(thirdReceipt, parkingLots[1])
 
         assertEquals(firstVehicle, actualFirstVehicle)
         assertEquals(thirdVehicle, actualThirdVehicle)
+    }
+
+    @Test
+    fun `should throw error when park a vehicle by drive while all parking lots are full`() {
+        val firstParkingLot = ParkingLot(ArrayList(2))
+        val secondParkingLot = ParkingLot(ArrayList(2))
+
+        val driver = Driver("Xiao Zhang")
+        val attendant = Attendant("Xiao Hu")
+
+        val firstVehicle = Vehicle("100")
+        val lastVehicle = Vehicle("101")
+
+        val parkingLots = arrayListOf(firstParkingLot, secondParkingLot)
+
+        val firstReceipt = attendant.park(firstVehicle, parkingLots)
+
+        for (i in 2..3) {
+            attendant.park(Vehicle(i.toString()), parkingLots)
+        }
+
+        val lastReceipt = attendant.park(lastVehicle, parkingLots)
+
+        assertFailsWith(
+                exceptionClass = Exception::class,
+                message = "Parking lots are full now.",
+                block = {attendant.park(Vehicle("1005"), parkingLots)}
+        )
+
+        assertEquals(firstVehicle, driver.take(firstReceipt, parkingLots[0]))
+        assertEquals(lastVehicle, driver.take(lastReceipt, parkingLots[1]))
     }
 }
