@@ -2,13 +2,13 @@ package parkinglot
 
 import java.util.*
 
-class ParkingLot {
+class ParkingLot (vehicles: ArrayList<Vehicle> = ArrayList(Constant.MAX_SIZE)){
 
     private companion object Constant {
         const val MAX_SIZE = 10
     }
 
-    private val vehicles = ArrayList<Vehicle>(Constant.MAX_SIZE)
+    private val vehicles = vehicles
 
     fun park(vehicle: Vehicle, driverName: String): Receipt {
         if (vehicles.size == MAX_SIZE) {
