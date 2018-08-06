@@ -2,24 +2,24 @@ package parkinglot
 
 import java.util.*
 
-class ParkingLot (vehicles: ArrayList<Vehicle> = ArrayList(Constant.MAX_SIZE)){
+class ParkingLot (vehicles: MutableList<Vehicle>){
 
-    private companion object Constant {
-        const val MAX_SIZE = 10
+    public companion object Constant {
+        const val MAX_SIZE = 2
     }
 
     private val vehicles = vehicles
 
     fun park(vehicle: Vehicle, driverName: String): Receipt {
-        if (vehicles.size == MAX_SIZE) {
+        if (isFull()) {
             throw Exception("Parking lot is full now.")
         } else {
             if (vehicles.contains(vehicle)) {
                 throw IllegalArgumentException("Such vehicle has existed.")
             }
             vehicles.add(vehicle)
+            return Receipt(vehicle.licenseNo, driverName)
         }
-        return Receipt(vehicle.licenseNo, driverName)
     }
 
     fun take(receipt: Receipt, driverName: String): Vehicle? {
@@ -32,5 +32,8 @@ class ParkingLot (vehicles: ArrayList<Vehicle> = ArrayList(Constant.MAX_SIZE)){
         vehicles.remove(vehicle)
         return vehicle
     }
+
+    fun isFull() = vehicles.size == MAX_SIZE
+
 
 }

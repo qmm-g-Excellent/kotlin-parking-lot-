@@ -10,7 +10,7 @@ class DriverTest {
     fun `should parking a vehicle to a parking lot and take it out`() {
         val vehicle = Vehicle("001")
         val driver = Driver("XiaoMing")
-        val parkingLot = ParkingLot()
+        val parkingLot = ParkingLot(ArrayList<Vehicle>(ParkingLot.Constant.MAX_SIZE) )
         val receipt = driver.park(vehicle, parkingLot)
         val actualVehicle = driver.take(receipt, parkingLot)
         assertEquals(vehicle, actualVehicle)
@@ -20,7 +20,7 @@ class DriverTest {
     fun `should parking multiple vehicles to a parking lot and take it out`() {
         val firstVehicle = Vehicle("001")
         val secondVehicle = Vehicle("002")
-        val parkingLot = ParkingLot()
+        val parkingLot = ParkingLot(ArrayList<Vehicle>(ParkingLot.Constant.MAX_SIZE)  )
 
         val xiaoMing = Driver("XiaoMing")
         val xiaoMingReceipt = xiaoMing.park(firstVehicle, parkingLot)
@@ -37,7 +37,7 @@ class DriverTest {
     fun `should throw error when park a existed vehicle`() {
         val driver = Driver("XiaoZhang")
         val vehicle = Vehicle("001")
-        val parkingLot = ParkingLot()
+        val parkingLot = ParkingLot(ArrayList<Vehicle>(ParkingLot.Constant.MAX_SIZE)  )
         driver.park(vehicle, parkingLot)
 
         assertFailsWith(IllegalArgumentException::class, "Such vehicle has existed.") {
@@ -48,7 +48,7 @@ class DriverTest {
     @Test
     fun `should throw error when take a not existed vehicle`() {
         val driver = Driver("XiaoZhang")
-        val parkingLot = ParkingLot()
+        val parkingLot = ParkingLot(ArrayList<Vehicle>(ParkingLot.Constant.MAX_SIZE) )
 
         assertFailsWith(NoSuchElementException::class,"No such vehicle in parkingLot.") {
             driver.take(Receipt("Not parked vehicle", "xiaoming"), parkingLot)
@@ -58,9 +58,9 @@ class DriverTest {
     @Test
     fun `should throw error when park a vehicle while parking lot is full`() {
         val driver = Driver("XiaoZhang")
-        val parkingLot = ParkingLot()
+        val parkingLot = ParkingLot(ArrayList<Vehicle>(ParkingLot.Constant.MAX_SIZE)  )
 
-        for (i in 1..10) {
+        for (i in 1..2) {
             driver.park(Vehicle(i.toString()), parkingLot)
         }
 
@@ -73,7 +73,7 @@ class DriverTest {
 
     @Test
     fun `should not take the same vehicle`() {
-        val parkingLot = ParkingLot()
+        val parkingLot = ParkingLot(ArrayList<Vehicle>(ParkingLot.Constant.MAX_SIZE) )
         val driver = Driver("XiaoMing")
         val vehicle = Vehicle("001")
 

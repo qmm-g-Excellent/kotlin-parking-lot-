@@ -3,7 +3,15 @@ package parkinglot
 class Attendant (var name: String){
 
     fun park(vehicle: Vehicle, parkingLots: List<ParkingLot>): Receipt {
-      return  parkingLots[0].park(vehicle, this.name)
+        for (parkingLot in parkingLots) {
+            if (!parkingLot.isFull()) {
+                return  parkingLot.park(vehicle, this.name)
+            }
+            if (parkingLots.indexOf(parkingLot) == parkingLots.size) {
+              continue
+            }
+        }
+        throw Exception("All parking lots are full now.")
     }
 
     fun take(receipt: Receipt, parkingLot: ParkingLot) {
