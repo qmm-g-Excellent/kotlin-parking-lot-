@@ -8,8 +8,7 @@ class AttendantTest {
 
     @Test
     fun `attendant parking a vehicle to a parking lot in order and take it out by drive`() {
-        val vehicles = ArrayList<Vehicle>(2)
-        val parkingLot = ParkingLot(vehicles)
+        val parkingLot = ParkingLot(ArrayList(2))
 
         val attendant = Attendant("Xiao Li")
         val drive = Driver("Xiao Zhang")
@@ -24,10 +23,8 @@ class AttendantTest {
 
     @Test
     fun `attendant parking three vehicles to two parking lots in order and take third vehicle out from second parking lot by drive`() {
-        val firstVehicles = ArrayList<Vehicle>(2)
-        val secondVehicles = ArrayList<Vehicle>(2)
-        val firstParkingLot = ParkingLot(firstVehicles)
-        val secondParkingLot = ParkingLot(secondVehicles)
+        val firstParkingLot = ParkingLot(ArrayList(2))
+        val secondParkingLot = ParkingLot(ArrayList(2))
 
         val drive = Driver("Xiao Zhang")
         val attendant = Attendant("Xiao Hu")
@@ -47,5 +44,37 @@ class AttendantTest {
 
         assertEquals(firstVehicle, actualFirstVehicle)
         assertEquals(thirdVehicle, actualThirdVehicle)
+    }
+
+    @Test
+    fun `attendant parking two vehicles to two parking lots in order and take second vehicle out from second parking lot by drive`() {
+        val firstParkingLot = ParkingLot(ArrayList(2))
+        val secondParkingLot = ParkingLot(ArrayList(2))
+
+        val drive = Driver("Xiao Zhang")
+        val attendant = Attendant("Xiao Hu")
+
+        val firstVehicle = Vehicle("100")
+        val lastVehicle = Vehicle("101")
+
+        val parkingLots = arrayListOf(firstParkingLot, secondParkingLot)
+
+        val firstReceipt = attendant.park(firstVehicle, parkingLots)
+
+        for (i in 2..3) {
+            attendant.park(Vehicle(i.toString()), parkingLots)
+        }
+
+        val lastReceipt = attendant.park(lastVehicle, parkingLots)
+
+        assertFailsWith(
+                exceptionClass = Exception::class,
+                message = "Parking lots are full now.",
+                block = {attendant.park(Vehicle("1005"), parkingLots)}
+        )
+
+        assertEquals(firstVehicle, drive.take(firstReceipt, parkingLots[0]))
+        assertEquals(lastVehicle, drive.take(lastReceipt, parkingLots[1]))
+
     }
 }

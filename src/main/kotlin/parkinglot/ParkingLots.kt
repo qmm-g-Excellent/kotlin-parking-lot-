@@ -1,21 +1,19 @@
 package parkinglot
 
-class Attendant (var name: String){
+class ParkingLots(parkingLots: ArrayList<ParkingLot>) {
 
-    fun park(vehicle: Vehicle, parkingLots: List<ParkingLot>): Receipt {
+    private val parkingLots = parkingLots
+
+    fun park(vehicle :Vehicle, driverName: String): Receipt {
         for (parkingLot in parkingLots) {
             if (!parkingLot.isFull()) {
-                return  parkingLot.park(vehicle, this.name)
+                return  parkingLot.park(vehicle, driverName)
             }
             if (parkingLots.indexOf(parkingLot) == parkingLots.size) {
                 continue
             }
         }
         throw Exception("All parking lots are full now.")
-    }
-
-    fun take(receipt: Receipt, parkingLot: ParkingLot) {
-        return
     }
 
 }
