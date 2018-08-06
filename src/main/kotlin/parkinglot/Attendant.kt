@@ -14,8 +14,6 @@ class Attendant (var name: String){
         throw Exception("All parking lots are full now.")
     }
 
-    fun take(receipt: Receipt, parkingLot: ParkingLot) {
-        return
-    }
+    fun take(receipt: Receipt, parkingLot: ParkingLot) = parkingLot.take(receipt, this.name)
 
 }
