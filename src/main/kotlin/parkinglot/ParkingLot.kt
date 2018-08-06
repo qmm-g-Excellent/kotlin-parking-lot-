@@ -4,7 +4,7 @@ import java.util.*
 
 class ParkingLot (vehicles: MutableList<Vehicle>){
 
-    public companion object Constant {
+     companion object Constant {
         const val MAX_SIZE = 2
     }
 
@@ -22,7 +22,7 @@ class ParkingLot (vehicles: MutableList<Vehicle>){
         }
     }
 
-    fun take(receipt: Receipt, driverName: String): Vehicle? {
+    fun take(receipt: Receipt): Vehicle? {
         val vehicle = vehicles.firstOrNull { v ->
             receipt.match(v.licenseNo)
         }
@@ -34,6 +34,7 @@ class ParkingLot (vehicles: MutableList<Vehicle>){
     }
 
     fun isFull() = vehicles.size == MAX_SIZE
+
 
 
 }

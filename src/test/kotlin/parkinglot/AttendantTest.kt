@@ -13,10 +13,13 @@ class AttendantTest {
         val attendant = Attendant("Xiao Li")
         val driver = Driver("Xiao Zhang")
         val vehicle = Vehicle("100")
-        val parkingLots = arrayListOf(parkingLot)
+        val parkingLotList = arrayListOf(parkingLot)
+
+        val parkingLots = ParkingLots(parkingLotList)
+
 
         val receipt = attendant.park(vehicle, parkingLots)
-        val actualVehicle = driver.take(receipt, parkingLots[0])
+        val actualVehicle = driver.take(receipt, parkingLotList[0])
 
         assertEquals(vehicle, actualVehicle)
     }
@@ -33,14 +36,15 @@ class AttendantTest {
         val secondVehicle = Vehicle("101")
         val thirdVehicle = Vehicle("102")
 
-        val parkingLots = arrayListOf(firstParkingLot, secondParkingLot)
+        val parkingLotList = arrayListOf(firstParkingLot, secondParkingLot)
+        val parkingLots = ParkingLots(arrayListOf(firstParkingLot, secondParkingLot))
 
         val firstReceipt = attendant.park(firstVehicle, parkingLots)
                           attendant.park(secondVehicle, parkingLots)
         val thirdReceipt = attendant.park(thirdVehicle, parkingLots)
 
-        val actualFirstVehicle = driver.take(firstReceipt, parkingLots[0])
-        val actualThirdVehicle = driver.take(thirdReceipt, parkingLots[1])
+        val actualFirstVehicle = driver.take(firstReceipt, parkingLotList[0])
+        val actualThirdVehicle = driver.take(thirdReceipt, parkingLotList[1])
 
         assertEquals(firstVehicle, actualFirstVehicle)
         assertEquals(thirdVehicle, actualThirdVehicle)
@@ -57,7 +61,8 @@ class AttendantTest {
         val firstVehicle = Vehicle("100")
         val lastVehicle = Vehicle("101")
 
-        val parkingLots = arrayListOf(firstParkingLot, secondParkingLot)
+        val parkingLotList = arrayListOf(firstParkingLot, secondParkingLot)
+        val parkingLots = ParkingLots(parkingLotList)
 
         val firstReceipt = attendant.park(firstVehicle, parkingLots)
 
@@ -73,8 +78,8 @@ class AttendantTest {
                 block = {attendant.park(Vehicle("1005"), parkingLots)}
         )
 
-        assertEquals(firstVehicle, driver.take(firstReceipt, parkingLots[0]))
-        assertEquals(lastVehicle, driver.take(lastReceipt, parkingLots[1]))
+        assertEquals(firstVehicle, driver.take(firstReceipt, parkingLotList[0]))
+        assertEquals(lastVehicle, driver.take(lastReceipt, parkingLotList[1]))
     }
 
     @Test
@@ -84,10 +89,11 @@ class AttendantTest {
         val attendant = Attendant("Xiao Li")
         val driver = Driver("Xiao Zhang")
         val vehicle = Vehicle("100")
-        val parkingLots = arrayListOf(parkingLot)
+        val parkingLotList = arrayListOf(parkingLot)
+        val parkingLots = ParkingLots(arrayListOf(parkingLot))
 
         val receipt = driver.park(vehicle, parkingLots)
-        val actualVehicle = attendant.take(receipt, parkingLots[0])
+        val actualVehicle = attendant.take(receipt, parkingLotList[0])
 
 
         assertEquals(vehicle, actualVehicle)
@@ -105,14 +111,15 @@ class AttendantTest {
         val secondVehicle = Vehicle("101")
         val thirdVehicle = Vehicle("102")
 
-        val parkingLots = arrayListOf(firstParkingLot, secondParkingLot)
+        val parkingLotList = arrayListOf(firstParkingLot, secondParkingLot)
+        val parkingLots = ParkingLots(parkingLotList)
 
         val firstReceipt = driver.park(firstVehicle, parkingLots)
         driver.park(secondVehicle, parkingLots)
         val thirdReceipt = driver.park(thirdVehicle, parkingLots)
 
-        val actualFirstVehicle = attendant.take(firstReceipt, parkingLots[0])
-        val actualThirdVehicle = attendant.take(thirdReceipt, parkingLots[1])
+        val actualFirstVehicle = attendant.take(firstReceipt, parkingLotList[0])
+        val actualThirdVehicle = attendant.take(thirdReceipt, parkingLotList[1])
 
         assertEquals(firstVehicle, actualFirstVehicle)
         assertEquals(thirdVehicle, actualThirdVehicle)
@@ -129,7 +136,8 @@ class AttendantTest {
         val firstVehicle = Vehicle("100")
         val lastVehicle = Vehicle("101")
 
-        val parkingLots = arrayListOf(firstParkingLot, secondParkingLot)
+        val parkingLotList = arrayListOf(firstParkingLot, secondParkingLot)
+        val parkingLots = ParkingLots(parkingLotList)
 
         val firstReceipt = attendant.park(firstVehicle, parkingLots)
 
@@ -145,7 +153,7 @@ class AttendantTest {
                 block = {attendant.park(Vehicle("1005"), parkingLots)}
         )
 
-        assertEquals(firstVehicle, driver.take(firstReceipt, parkingLots[0]))
-        assertEquals(lastVehicle, driver.take(lastReceipt, parkingLots[1]))
+        assertEquals(firstVehicle, driver.take(firstReceipt, parkingLotList[0]))
+        assertEquals(lastVehicle, driver.take(lastReceipt, parkingLotList[1]))
     }
 }
