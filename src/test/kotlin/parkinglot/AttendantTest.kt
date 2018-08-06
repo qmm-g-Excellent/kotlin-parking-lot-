@@ -93,4 +93,28 @@ class AttendantTest {
         assertEquals(vehicle, actualVehicle)
     }
 
+    @Test
+    fun `drive parking three vehicles to two parking lots in order and take third vehicle out from second parking lot by attendant`() {
+        val firstParkingLot = ParkingLot(ArrayList(2))
+        val secondParkingLot = ParkingLot(ArrayList(2))
+
+        val drive = Driver("Xiao Zhang")
+        val attendant = Attendant("Xiao Hu")
+
+        val firstVehicle = Vehicle("100")
+        val secondVehicle = Vehicle("101")
+        val thirdVehicle = Vehicle("102")
+
+        val parkingLots = arrayListOf(firstParkingLot, secondParkingLot)
+
+        val firstReceipt = drive.park(firstVehicle, parkingLots)
+        drive.park(secondVehicle, parkingLots)
+        val thirdReceipt = drive.park(thirdVehicle, parkingLots)
+
+        val actualFirstVehicle = attendant.take(firstReceipt, parkingLots[0])
+        val actualThirdVehicle = attendant.take(thirdReceipt, parkingLots[1])
+
+        assertEquals(firstVehicle, actualFirstVehicle)
+        assertEquals(thirdVehicle, actualThirdVehicle)
+    }
 }
