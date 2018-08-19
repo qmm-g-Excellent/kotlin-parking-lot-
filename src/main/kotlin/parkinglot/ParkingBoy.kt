@@ -6,10 +6,22 @@ class ParkingBoy(
         private val name: String,
         private vararg val parkingLots: ParkingLot
 ) {
-    fun park(vehicle: Vehicle): Receipt? {
+    fun parkByInOrder(vehicle: Vehicle): Receipt? {
         val receipt = parkingLots.firstOrNull { !it.isFull() }?.park(vehicle, name)
         if (Objects.isNull(receipt)) {
             throw Exception("All parking lots are full now.")
+        }
+        return receipt
+    }
+
+    fun parkByMaxEmptySpace(vehicle: Vehicle): Receipt? {
+        val receipt = parkingLots.firstOrNull { it.isEmpty() }?.park(vehicle, name)
+        if (Objects.isNull(receipt)) {
+            return parkingLots.reduce { max, item ->
+                if (max.countEmptySpace() > item.countEmptySpace())
+                    max
+                else item
+            }.park(vehicle, name)
         }
         return receipt
     }
@@ -20,7 +32,7 @@ class ParkingBoy(
         for (parkingLot in parkingLots) {
             val vehicle = parkingLot.take(receipt)
             if (Objects.nonNull(vehicle)) {
-                 parkingLotNum = parkingLots.indexOf(parkingLot)
+                parkingLotNum = parkingLots.indexOf(parkingLot)
                 actualVehicle = vehicle!!
             }
         }

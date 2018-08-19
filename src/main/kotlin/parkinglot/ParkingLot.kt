@@ -37,4 +37,8 @@ class ParkingLot(vehicles: MutableList<Vehicle>) {
 
     fun isFull() = vehicles.size == MAX_SIZE
 
+    fun countEmptySpace() = MAX_SIZE - vehicles.size
+
+    fun isEmpty() = vehicles.size == 0
+
 }

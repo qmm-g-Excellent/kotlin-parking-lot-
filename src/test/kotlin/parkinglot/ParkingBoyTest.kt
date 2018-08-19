@@ -15,7 +15,7 @@ class ParkingBoyTest {
         var parkingLot = ParkingLot(ArrayList(1))
         var parkingBoy = ParkingBoy("Xiao Ming", parkingLot)
         var vehicle = Vehicle("100")
-        var receipt = parkingBoy.park(vehicle)
+        var receipt = parkingBoy.parkByInOrder(vehicle)
         val (parkingLotNum, actualVehicle) = parkingBoy.take(receipt!!)
         assertEquals(vehicle, actualVehicle)
         assertEquals(0, parkingLotNum)
@@ -32,9 +32,9 @@ class ParkingBoyTest {
         val secondVehicle = Vehicle("101")
         val thirdVehicle = Vehicle("102")
 
-        val firstReceipt = parkingBoy.park(firstVehicle)
-        parkingBoy.park(secondVehicle)
-        val thirdReceipt = parkingBoy.park(thirdVehicle)
+        val firstReceipt = parkingBoy.parkByInOrder(firstVehicle)
+        parkingBoy.parkByInOrder(secondVehicle)
+        val thirdReceipt = parkingBoy.parkByInOrder(thirdVehicle)
 
         val (firstParkingLotNum, actualFirstVehicle)   = parkingBoy.take(firstReceipt!!)
         val (secondParkingLotNum, actualThirdVehicle)   = parkingBoy.take(thirdReceipt!!)
@@ -55,18 +55,18 @@ class ParkingBoyTest {
         val firstVehicle = Vehicle("100")
         val lastVehicle = Vehicle("101")
 
-        val firstReceipt = parkingBoy.park(firstVehicle)
+        val firstReceipt = parkingBoy.parkByInOrder(firstVehicle)
 
         for (i in 2..3) {
-            parkingBoy.park(Vehicle(i.toString()))
+            parkingBoy.parkByInOrder(Vehicle(i.toString()))
         }
 
-        val lastReceipt = parkingBoy.park(lastVehicle)
+        val lastReceipt = parkingBoy.parkByInOrder(lastVehicle)
 
         assertFailsWith(
                 exceptionClass = Exception::class,
                 message = "Parking lots are full now.",
-                block = { parkingBoy.park(Vehicle("1005")) }
+                block = { parkingBoy.parkByInOrder(Vehicle("1005")) }
         )
 
         val (firstParkingLotNum, actualFirstVehicle)   = parkingBoy.take(firstReceipt!!)
@@ -85,8 +85,26 @@ class ParkingBoyTest {
         val driver = Driver("Xiao Zhang")
         val vehicle = Vehicle("100")
 
-        val receipt = parkingBoy.park(vehicle)
+        val receipt = parkingBoy.parkByInOrder(vehicle)
 
         assertEquals(vehicle, driver.take(receipt!!, parkingLot))
+    }
+
+    @Test
+    fun `parking boy parking two vehicles to some parking lots with the most empty spaces and take it out by parling boy`() {
+        val firstParkingLot = ParkingLot(ArrayList(2))
+        val secondParkingLot = ParkingLot(ArrayList(2))
+        val parkingBoy = ParkingBoy("Xiao Li", firstParkingLot, secondParkingLot)
+        val firstVehicle = Vehicle("100")
+        val secondVehicle = Vehicle("101")
+        val firstReceipt = parkingBoy.parkByMaxEmptySpace(firstVehicle)
+        val secondReceipt = parkingBoy.parkByMaxEmptySpace(secondVehicle)
+
+        val (firstParkingLotNum, actualFirstVehicle) = parkingBoy.take(firstReceipt!!)
+        val (secondParkingLotNum, actualSecondVehicle) = parkingBoy.take(secondReceipt!!)
+        assertEquals(firstVehicle, actualFirstVehicle)
+        assertEquals(0, firstParkingLotNum)
+        assertEquals(secondVehicle, actualSecondVehicle)
+        assertEquals(1, secondParkingLotNum)
     }
 }
