@@ -131,4 +131,22 @@ class ParkingBoyTest {
         assertEquals(thirdVehicle, actualThirdVehicle)
         assertEquals(0, thirdParkingLotNum)
     }
+
+    @Test
+    fun `should throw error when park a vehicle to parking lots with the most empty spaces while all parking lots are full`() {
+        val firstParkingLot = ParkingLot(ArrayList(2))
+        val secondParkingLot = ParkingLot(ArrayList(2))
+        val parkingBoy = ParkingBoy("Xiao Li", firstParkingLot, secondParkingLot)
+
+        for (i in 1..4) {
+            parkingBoy.parkByMaxEmptySpace(Vehicle(i.toString()))
+        }
+
+        assertFailsWith(
+                exceptionClass = Exception::class,
+                message = "Parking lots are full now.",
+                block = { parkingBoy.parkByMaxEmptySpace(Vehicle("1005")) }
+        )
+    }
+
 }

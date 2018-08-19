@@ -18,7 +18,13 @@ class ParkingBoy(
     fun parkByMaxEmptySpace(vehicle: Vehicle): Receipt? {
         var emptySpacesMap = HashMap<ParkingLot, Int>()
         parkingLots.forEach {
-            emptySpacesMap[it] = it.countEmptySpace()
+            if (!it.isFull()) {
+                emptySpacesMap[it] = it.countEmptySpace()
+            }
+        }
+
+        if (emptySpacesMap.isEmpty()) {
+            throw Exception("All parking lots are full now.")
         }
 
         return emptySpacesMap.toList()
