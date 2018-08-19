@@ -1,6 +1,7 @@
 package parkinglot
 
 import java.util.*
+import kotlin.collections.HashMap
 
 class ParkingBoy(
         private val name: String,
@@ -15,15 +16,14 @@ class ParkingBoy(
     }
 
     fun parkByMaxEmptySpace(vehicle: Vehicle): Receipt? {
-        val receipt = parkingLots.firstOrNull { it.isEmpty() }?.park(vehicle, name)
-        if (Objects.isNull(receipt)) {
-            return parkingLots.reduce { max, item ->
-                if (max.countEmptySpace() > item.countEmptySpace())
-                    max
-                else item
-            }.park(vehicle, name)
+        var emptySpacesMap = HashMap<ParkingLot, Int>()
+        parkingLots.forEach {
+            emptySpacesMap[it] = it.countEmptySpace()
         }
-        return receipt
+
+        return emptySpacesMap.toList()
+                .sortedBy { (key, value) -> -value }
+                .first().first.park(vehicle, name)
     }
 
     fun take(receipt: Receipt): Pair<Int, Vehicle?> {
@@ -37,6 +37,5 @@ class ParkingBoy(
             }
         }
         return Pair(parkingLotNum, actualVehicle)
-
     }
 }

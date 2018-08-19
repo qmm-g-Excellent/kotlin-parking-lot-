@@ -107,4 +107,28 @@ class ParkingBoyTest {
         assertEquals(secondVehicle, actualSecondVehicle)
         assertEquals(1, secondParkingLotNum)
     }
+
+
+    @Test
+    fun `parking boy parking three vehicles some parking lots with the most empty spaces and take it out by parling boy`() {
+        val firstParkingLot = ParkingLot(ArrayList(2))
+        val secondParkingLot = ParkingLot(ArrayList(2))
+        val parkingBoy = ParkingBoy("Xiao Li", firstParkingLot, secondParkingLot)
+        val firstVehicle = Vehicle("100")
+        val secondVehicle = Vehicle("101")
+        val thirdVehicle = Vehicle("103")
+        val firstReceipt = parkingBoy.parkByMaxEmptySpace(firstVehicle)
+        val secondReceipt = parkingBoy.parkByMaxEmptySpace(secondVehicle)
+        val thirdReceipt = parkingBoy.parkByMaxEmptySpace(thirdVehicle)
+
+        val (firstParkingLotNum, actualFirstVehicle) = parkingBoy.take(firstReceipt!!)
+        val (secondParkingLotNum, actualSecondVehicle) = parkingBoy.take(secondReceipt!!)
+        val (thirdParkingLotNum, actualThirdVehicle) = parkingBoy.take(thirdReceipt!!)
+        assertEquals(firstVehicle, actualFirstVehicle)
+        assertEquals(0, firstParkingLotNum)
+        assertEquals(secondVehicle, actualSecondVehicle)
+        assertEquals(1, secondParkingLotNum)
+        assertEquals(thirdVehicle, actualThirdVehicle)
+        assertEquals(0, thirdParkingLotNum)
+    }
 }
