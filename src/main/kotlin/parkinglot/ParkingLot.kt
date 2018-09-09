@@ -1,14 +1,11 @@
 package parkinglot
 
 import java.util.*
+import kotlin.collections.ArrayList
 
-class ParkingLot(vehicles: MutableList<Vehicle>) {
+class ParkingLot(private val capacity: Int) {
 
-    companion object Constant {
-        const val MAX_SIZE = 2
-    }
-
-    private val vehicles = vehicles
+    private val vehicles = ArrayList<Vehicle>(capacity)
 
     fun park(vehicle: Vehicle, driverName: String): Receipt {
         if (isFull()) {
@@ -26,19 +23,15 @@ class ParkingLot(vehicles: MutableList<Vehicle>) {
         val vehicle = vehicles.firstOrNull { v ->
             receipt.match(v.licenseNo)
         }
-//        if (Objects.isNull(vehicle)) {
-//            throw NoSuchElementException("No such vehicle in parkingLot.")
-//        }
         if (Objects.nonNull(vehicle)) {
             vehicles.remove(vehicle)
         }
         return vehicle
     }
 
-    fun isFull() = vehicles.size == MAX_SIZE
+    fun isFull() = vehicles.size == capacity
 
-    fun countEmptySpace() = MAX_SIZE - vehicles.size
+    fun countEmptySpace() = capacity - vehicles.size
 
-    fun isEmpty() = vehicles.size == 0
-
+    fun countEmptySpaceRate() = countEmptySpace().toDouble() / capacity
 }
